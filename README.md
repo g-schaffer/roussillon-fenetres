@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Roussillon Fenêtres - Site E-commerce
 
-## Getting Started
+Site marchand Next.js 15 pour la vente de moustiquaires enroulables ECO avec intégration Stripe et composants shadcn/ui.
 
-First, run the development server:
+## Fonctionnalités
+
+- Page d'accueil avec présentation du produit "Moustiquaire Enroulable ECO"
+- Système de paiement sécurisé via Stripe
+- Pages de confirmation (succès/annulation)
+- Design responsive avec Tailwind CSS et shadcn/ui
+- Support du mode sombre
+- TypeScript pour la sécurité du code
+
+## Installation
+
+1. Installez les dépendances :
+```bash
+npm install
+```
+
+2. Configurez vos clés Stripe dans le fichier `.env.local` :
+
+```env
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_votre_cle_publique
+STRIPE_SECRET_KEY=sk_test_votre_cle_secrete
+NEXT_PUBLIC_DOMAIN=http://localhost:3000
+```
+
+Pour obtenir vos clés Stripe :
+- Créez un compte sur [Stripe](https://stripe.com)
+- Allez dans Développeurs > Clés API
+- Copiez vos clés de test
+
+3. Lancez le serveur de développement :
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Structure du projet
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+├── page.tsx                 # Page d'accueil avec le produit
+├── checkout/
+│   └── page.tsx            # Page de redirection vers Stripe
+├── success/
+│   └── page.tsx            # Page de confirmation d'achat
+├── cancel/
+│   └── page.tsx            # Page d'annulation
+└── api/
+    └── checkout/
+        └── route.ts        # API route pour créer la session Stripe
 
-## Learn More
+components/
+└── ui/                      # Composants shadcn/ui
+    ├── button.tsx
+    ├── card.tsx
+    ├── badge.tsx
+    └── separator.tsx
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Configuration du produit
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Le produit est configuré dans `app/api/checkout/route.ts` :
+- Nom : Moustiquaire Enroulable ECO
+- Prix : 149,99 €
+- Description : Moustiquaire enroulable de qualité
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Pour modifier le prix ou les détails, éditez le fichier `app/api/checkout/route.ts`.
 
-## Deploy on Vercel
+## Mode Production
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Remplacez les clés de test Stripe par vos clés de production dans `.env.local`
+2. Mettez à jour `NEXT_PUBLIC_DOMAIN` avec votre URL de production
+3. Buildez le projet :
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build
+npm start
+```
+
+## Technologies utilisées
+
+- Next.js 15
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- shadcn/ui
+- Lucide Icons
+- Stripe
+- @stripe/stripe-js
+
+## Support
+
+Pour toute question ou problème, consultez la documentation :
+- [Next.js](https://nextjs.org/docs)
+- [Stripe](https://stripe.com/docs)
+- [shadcn/ui](https://ui.shadcn.com)

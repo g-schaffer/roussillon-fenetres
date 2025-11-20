@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { ProductCTA } from "@/components/product-cta";
 
@@ -54,8 +53,8 @@ export default function StoresPage() {
         {/* Catégories */}
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {categories.map((category, index) => (
-              <Link key={index} href={category.href}>
+            {categories.map((category) => (
+              <Link key={category.title} href={category.href}>
                 <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group overflow-hidden">
                   <div className="relative h-64 w-full overflow-hidden">
                     <Image

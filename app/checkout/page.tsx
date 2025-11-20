@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -59,5 +59,34 @@ export default function CheckoutPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+          <Card className="max-w-2xl w-full">
+            <CardHeader>
+              <CardTitle className="text-3xl text-center">
+                Finalisation de votre commande
+              </CardTitle>
+              <CardDescription className="text-center">
+                Veuillez patienter quelques instants...
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+              <p className="text-muted-foreground text-center">
+                Chargement...
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      }
+    >
+      <CheckoutContent />
+    </Suspense>
   );
 }

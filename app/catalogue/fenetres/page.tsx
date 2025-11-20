@@ -55,7 +55,7 @@ export default function FenetresPage() {
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {categories.map((category, index) => (
-              <Link key={index} href={category.href}>
+              <Link key={category.title} href={category.href}>
                 <Card className="h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group overflow-hidden">
                   <div className="relative h-64 w-full overflow-hidden">
                     <Image

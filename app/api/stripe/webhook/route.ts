@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
+import { type NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-11-20.acacia",
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+  apiVersion: "2025-11-17.clover",
 });
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      process.env.STRIPE_WEBHOOK_SECRET || ""
     );
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err.message);
@@ -54,7 +54,11 @@ export async function POST(request: NextRequest) {
 
         // Récupérer les adresses
         const billingAddress = session.customer_details?.address;
-        const shippingAddress = session.shipping_details?.address;
+        // Stripe.Checkout.Session n'a pas shipping_details par défaut
+        // Utilisons la même adresse de facturation comme fallback
+        const shippingAddress =
+          (session.customer_details as any)?.shipping_address ||
+          billingAddress;
 
         if (customerEmail) {
           // Envoyer l'email de confirmation

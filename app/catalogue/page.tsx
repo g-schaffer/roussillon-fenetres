@@ -1,7 +1,5 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { CatalogueCategories } from "@/components/catalogue-categories";
 
 import { ProductCTA } from "@/components/product-cta";

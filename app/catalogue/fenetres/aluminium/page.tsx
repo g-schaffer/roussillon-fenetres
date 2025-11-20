@@ -95,8 +95,8 @@ export default function FenetresAluminiumPage() {
                 Ses principales caractéristiques sont :
               </p>
               <Accordion type="single" collapsible className="w-full">
-                {caracteristiquesFenetre.map((carac, index) => (
-                  <AccordionItem key={index} value={carac.value}>
+                {caracteristiquesFenetre.map((carac) => (
+                  <AccordionItem key={carac.value} value={carac.value}>
                     <AccordionTrigger className="text-left">
                       <div className="flex items-center gap-3">
                         <div className="rounded-full bg-primary/10 p-2 text-primary">
@@ -147,8 +147,8 @@ export default function FenetresAluminiumPage() {
                 Toujours fidèle à elle-même, Roussillon Fenêtres reste dans sa démarche de qualité en vous proposant une gamme de coulissants toutes options
               </p>
               <Accordion type="single" collapsible className="w-full">
-                {caracteristiquesCoulissant.map((carac, index) => (
-                  <AccordionItem key={index} value={carac.value}>
+                {caracteristiquesCoulissant.map((carac) => (
+                  <AccordionItem key={carac.value} value={carac.value}>
                     <AccordionTrigger className="text-left">
                       <div className="flex items-center gap-3">
                         <div className="rounded-full bg-primary/10 p-2 text-primary">

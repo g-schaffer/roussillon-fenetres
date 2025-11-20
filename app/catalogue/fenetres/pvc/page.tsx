@@ -83,8 +83,8 @@ export default function FenetresPVCPage() {
             <div>
               <h2 className="text-3xl font-bold mb-6">Modernité et luminosité</h2>
               <Accordion type="single" collapsible className="w-full">
-                {caracteristiquesModernite.map((carac, index) => (
-                  <AccordionItem key={index} value={carac.value}>
+                {caracteristiquesModernite.map((carac) => (
+                  <AccordionItem key={carac.value} value={carac.value}>
                     <AccordionTrigger className="text-left">
                       <div className="flex items-center gap-3">
                         <div className="rounded-full bg-primary/10 p-2 text-primary">
@@ -132,8 +132,8 @@ export default function FenetresPVCPage() {
             <div className="order-1 lg:order-2">
               <h2 className="text-3xl font-bold mb-6">Design et Garantie</h2>
               <Accordion type="single" collapsible className="w-full">
-                {caracteristiquesDesign.map((carac, index) => (
-                  <AccordionItem key={index} value={carac.value}>
+                {caracteristiquesDesign.map((carac) => (
+                  <AccordionItem key={carac.value} value={carac.value}>
                     <AccordionTrigger className="text-left">
                       <div className="flex items-center gap-3">
                         <div className="rounded-full bg-primary/10 p-2 text-primary">

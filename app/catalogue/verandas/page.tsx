@@ -57,7 +57,7 @@ export default function VerandasPage() {
           const isEven = index % 2 === 0;
 
           return (
-            <div key={index} className="max-w-7xl mx-auto mb-16">
+            <div key={section.title} className="max-w-7xl mx-auto mb-16">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 {/* Texte */}
                 <div className={`${isEven ? 'order-1' : 'order-1 lg:order-2'}`}>
