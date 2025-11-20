@@ -1,0 +1,76 @@
+jQuery(function($) {
+    let currencySymbol = $('.woocommerce-Price-currencySymbol').first().text() || '$';
+    function roundUp(value, list) {
+        value = parseFloat(value);
+        if (isNaN(value)) return null;
+        for (let i = 0; i < list.length; i++) {
+            if (value <= list[i]) return list[i];
+        }
+        return list[list.length - 1];
+    }
+
+    function updateLivePrice() {
+        let width  = parseFloat($('#pm_width').val());
+        let height = parseFloat($('#pm_height').val());
+        console.log('currencySymbol:', currencySymbol);
+        if (!width || !height) {
+            $('.woocommerce-Price-amount').each(function(){
+                $(this).text('—');
+            });
+            $('#pm_custom_price').val('');
+            return;
+        }
+
+        let matrix  = JSON.parse($('#pm_matrix').val());
+        let widths  = JSON.parse($('#pm_widths').val());
+        let heights = JSON.parse($('#pm_heights').val());
+
+        let rw = roundUp(width, widths);
+        let rh = roundUp(height, heights);
+
+        // access matrix by height key (string)
+        let row = matrix[rh];
+        if (!row) {
+            $('.woocommerce-Price-amount').each(function(){
+                $(this).text('—');
+            });
+            $('#pm_custom_price').val('');
+            return;
+        }
+
+        let widthIndex = widths.indexOf(rw);
+        if (widthIndex === -1 || row[widthIndex] === undefined) {
+            $('.woocommerce-Price-amount').each(function(){
+                $(this).text('—');
+            });
+            $('#pm_custom_price').val('');
+            return;
+        }
+
+        let price = parseFloat(row[widthIndex]);
+        if (isNaN(price)) {
+            $('.woocommerce-Price-amount').each(function(){
+                $(this).text('—');
+            });
+            $('#pm_custom_price').val('');
+            return;
+        }
+
+        // update WooCommerce price on product page
+        $('.woocommerce-Price-amount').each(function(){
+            $(this).text(price.toFixed(2));
+        });
+
+        
+        $('.woocommerce-Price-amount').append('&nbsp;<span class="woocommerce-Price-currencySymbol">' + currencySymbol + '</span>');
+
+        // set hidden input for Add to Cart
+        $('#pm_custom_price').val(price);
+    }
+
+    // attach event listeners
+    $('#pm_width, #pm_height').on('input', updateLivePrice);
+
+    // trigger on page load
+    //updateLivePrice();
+});
