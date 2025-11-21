@@ -62,6 +62,7 @@ export default function MoustiquairePage() {
               />
             </div>
 
+
             {/* Badges de confiance */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card>
