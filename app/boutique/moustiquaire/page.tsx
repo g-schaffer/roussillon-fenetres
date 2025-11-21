@@ -54,7 +54,7 @@ export default function MoustiquairePage() {
           <div className="space-y-4">
             <div className="relative aspect-square rounded-lg overflow-hidden bg-white">
               <Image
-                src="/catalogue.jpeg"
+                src="/moustiquaire_1.png"
                 alt="Moustiquaire fenêtre enroulable"
                 fill
                 className="object-cover"
