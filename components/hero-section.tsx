@@ -98,6 +98,7 @@ export function HeroSection() {
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
+        
       </div>
 
       {/* Carré bleu superposé à l'image, aligné sous le carousel */}
