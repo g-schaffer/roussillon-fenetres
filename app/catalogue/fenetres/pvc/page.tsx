@@ -46,7 +46,7 @@ export default function FenetresPVCPage() {
       {/* Image bannière pleine largeur */}
       <div className="relative w-full h-64 md:h-80 lg:h-96">
         <Image
-          src="/fenetre_pvc.avif"
+          src="/fenetre_pvc2.webp"
           alt="Fenêtres PVC"
           fill
           className="object-cover"
@@ -121,7 +121,7 @@ export default function FenetresPVCPage() {
             {/* Image */}
             <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden order-2 lg:order-1">
               <Image
-                src="/fenetre_pvc.avif"
+                src="/fenetre_pvc2.webp"
                 alt="Design et Garantie"
                 fill
                 className="object-cover"

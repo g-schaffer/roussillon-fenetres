@@ -9,12 +9,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { Check, Home, ChevronRight, Truck, Shield, CreditCard, Ruler, AlertCircle } from "lucide-react";
+import { Check, Home, ChevronRight, Truck, Shield, CreditCard, Ruler, AlertCircle, ChevronLeft } from "lucide-react";
 import { findPrice, findPriceHT, getDimensionRanges } from "@/lib/stripe-prices";
 
 export default function MoustiquairePage() {
   const [largeur, setLargeur] = useState(0);
   const [hauteur, setHauteur] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = [
+    { src: "/moustiquaire_1.png", alt: "Moustiquaire fenêtre enroulable" },
+    { src: "/moustiquaire1.png.jpeg", alt: "Moustiquaire fenêtre enroulable - vue 2" },
+    { src: "/moustiquaire2.png.jpeg", alt: "Moustiquaire fenêtre enroulable - vue 3" }
+  ];
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
 
   const dimensionRanges = getDimensionRanges();
 
@@ -52,14 +67,48 @@ export default function MoustiquairePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Galerie d'images */}
           <div className="space-y-4">
-            <div className="relative aspect-square rounded-lg overflow-hidden bg-white">
-              <Image
-                src="/moustiquaire_1.png"
-                alt="Moustiquaire fenêtre enroulable"
-                fill
-                className="object-cover"
-                priority
-              />
+            <div className="relative">
+              <div className="relative aspect-square rounded-lg overflow-hidden bg-white">
+                <Image
+                  src={images[currentImageIndex].src}
+                  alt={images[currentImageIndex].alt}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+
+              {/* Boutons de navigation */}
+              <button
+                onClick={prevImage}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full p-3 shadow-lg z-10"
+                aria-label="Image précédente"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full p-3 shadow-lg z-10"
+                aria-label="Image suivante"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
+              {/* Indicateurs */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentImageIndex
+                        ? "bg-primary w-8"
+                        : "bg-white/50 hover:bg-white/75"
+                    }`}
+                    aria-label={`Aller à l'image ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
 
 
@@ -145,9 +194,18 @@ export default function MoustiquairePage() {
 
                 {/* Dimensions */}
                 <div className="space-y-4">
-                  <Label className="text-base font-semibold">
-                    Dimensions <span className="text-red-500">*</span>
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-base font-semibold">
+                      Dimensions <span className="text-red-500">*</span>
+                    </Label>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open('/prise_de_mesure.pdf', '_blank')}
+                    >
+                      📏 Comment prendre les mesures
+                    </Button>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="largeur">Largeur (mm)</Label>
@@ -288,7 +346,7 @@ export default function MoustiquairePage() {
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="caracteristiques">Caractéristiques</TabsTrigger>
               <TabsTrigger value="avantages">Avantages</TabsTrigger>
-              <TabsTrigger value="installation">Installation</TabsTrigger>
+              <TabsTrigger value="installation">Entretien</TabsTrigger>
               <TabsTrigger value="questions">Questions</TabsTrigger>
               <TabsTrigger value="garanties">Garanties</TabsTrigger>
             </TabsList>
@@ -329,10 +387,8 @@ export default function MoustiquairePage() {
                   <ul className="space-y-2">
                     <li>• Type : Moustiquaire enroulable verticale</li>
                     <li>• Dimensions : Hauteur {dimensionRanges.hauteur.min} à {dimensionRanges.hauteur.max} mm × Largeur {dimensionRanges.largeur.min} à {dimensionRanges.largeur.max} mm</li>
-                    <li>• Toile : Fibre de verre (Noire ou Grise)</li>
+                    <li>• Toile : Fibre de verre</li>
                     <li>• Structure : Aluminium extrudé</li>
-                    <li>• Coloris structure : 7 options disponibles</li>
-                    <li>• Garantie : 5 ans (hors toile)</li>
                     <li>• Installation : 15-20 minutes</li>
                     <li>• Fabrication : France & Europe</li>
                   </ul>
@@ -352,7 +408,6 @@ export default function MoustiquairePage() {
                     <li>✅ Système enroulable discret</li>
                     <li>✅ Matériaux résistants aux intempéries</li>
                     <li>✅ Sur-mesure pour un ajustement parfait</li>
-                    <li>✅ Garantie 5 ans</li>
                   </ul>
                 </CardContent>
               </Card>
@@ -361,26 +416,15 @@ export default function MoustiquairePage() {
             <TabsContent value="installation" className="mt-6">
               <Card>
                 <CardContent className="p-6">
-                  <h3 className="font-semibold mb-4">Installation et entretien</h3>
+                  <h3 className="font-semibold mb-4">Entretien</h3>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-medium mb-2">Installation</h4>
-                      <p className="text-muted-foreground mb-2">
-                        Pose simple en 15-20 minutes, en autonomie ou avec un professionnel.
-                      </p>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                          📄 Notice montage - pose en tunnel
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          📄 Notice montage - pose en applique
-                        </Button>
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-medium mb-2">Entretien</h4>
+                      <h4 className="font-medium mb-2">Entretien de votre moustiquaire</h4>
                       <p className="text-muted-foreground">
                         Nettoyage simple à l'eau savonneuse. Ne pas utiliser de produits abrasifs.
+                      </p>
+                      <p className="text-muted-foreground mt-2">
+                        Pour un entretien optimal, nettoyez régulièrement la toile avec un chiffon doux humide. Évitez les détergents agressifs qui pourraient endommager les matériaux.
                       </p>
                     </div>
                   </div>

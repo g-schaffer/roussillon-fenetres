@@ -9,25 +9,25 @@ export default function VoletsRoulantsPage() {
       title: "Volets roulants rénovation",
       subtitle: "Confort et esthétique",
       description: "Les volets roulants rénovation représentent une solution idéale pour améliorer le confort, la sécurité et l'esthétique de votre habitation. Conçus pour s'adapter parfaitement aux fenêtres existantes, ils offrent une multitude d'avantages et se posent sans travaux lourds.",
-      image: "/volets_roulant.jpeg"
+      image: "/volet_roulant.jpg"
     },
     {
       title: "Isolation Thermique et Acoustique",
       subtitle: "Économies d'énergie garanties",
       description: "Nos volets roulants créent une barrière efficace contre les variations de température et les nuisances sonores. En hiver, ils limitent les déperditions de chaleur, et en été, ils protègent de la chaleur excessive. Cette isolation renforcée vous permet de réaliser des économies d'énergie significatives tout en améliorant votre confort au quotidien.",
-      image: "/volets_roulant.jpeg"
+      image: "/volet_roulant2.jpg"
     },
     {
       title: "Sécurité Renforcée",
       subtitle: "Protection optimale de votre domicile",
       description: "Les volets roulants constituent une protection efficace contre les tentatives d'effraction. Équipés de lames robustes et de systèmes de verrouillage performants, ils dissuadent les intrusions et protègent votre habitation. Certains modèles peuvent être motorisés avec commande à distance pour simuler une présence même en votre absence.",
-      image: "/volets_roulant.jpeg"
+      image: "/volet_roulant3.jpg"
     },
     {
       title: "Facilité d'Installation",
       subtitle: "Pose rapide et sans gros œuvre",
       description: "Spécialement conçus pour la rénovation, nos volets roulants s'installent facilement sur vos fenêtres existantes sans nécessiter de gros travaux de maçonnerie. Le coffre se fixe en applique sur la façade ou dans la tableau, selon vos préférences. Cette solution pratique vous permet de bénéficier rapidement de tous les avantages des volets roulants.",
-      image: "/volets_roulant.jpeg"
+      image: "/volet_roulant4.jpg"
     }
   ];
 
@@ -36,7 +36,7 @@ export default function VoletsRoulantsPage() {
       {/* Image bannière pleine largeur */}
       <div className="relative w-full h-64 md:h-80 lg:h-96">
         <Image
-          src="/volets_roulant.jpeg"
+          src="/volet_roulant2.jpg"
           alt="Volets Roulants"
           fill
           className="object-cover"

@@ -170,8 +170,8 @@ export function HeroSection() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[40%_60%] h-full">
         {/* Texte */}
-        <div className="flex items-end pb-16 bg-white dark:bg-gray-900 p-8 lg:p-12">
-          <div className="max-w-2xl">
+        <div className="bg-white dark:bg-gray-900 p-8 lg:p-12">
+          <div className="max-w-2xl" style={{ marginTop: '350px' }}>
             <div className="relative w-full h-20 md:h-24 lg:h-28 mb-6">
               <Image
                 src="/name.png"
