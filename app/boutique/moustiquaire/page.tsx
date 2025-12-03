@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ export default function MoustiquairePage() {
   const [largeur, setLargeur] = useState(0);
   const [hauteur, setHauteur] = useState(0);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const largeurInputId = useId();
+  const hauteurInputId = useId();
 
   const images = [
     { src: "/moustiquaire_1.png", alt: "Moustiquaire fenêtre enroulable" },
@@ -50,9 +52,9 @@ export default function MoustiquairePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 sm:py-8 lg:py-10">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm mb-8 text-muted-foreground">
+        <nav className="flex flex-wrap items-center gap-2 text-xs sm:text-sm mb-4 sm:mb-6 lg:mb-8 text-muted-foreground">
           <a href="/" className="hover:text-primary">
             <Home className="h-4 w-4" />
           </a>
@@ -64,11 +66,11 @@ export default function MoustiquairePage() {
           <span className="text-foreground">Moustiquaire fenêtre enroulable sur-mesure</span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Galerie d'images */}
           <div className="space-y-4">
             <div className="relative">
-              <div className="relative aspect-square rounded-lg overflow-hidden bg-white">
+              <div className="relative aspect-[4/3] sm:aspect-[4/3] md:aspect-square rounded-lg overflow-hidden bg-white">
                 <Image
                   src={images[currentImageIndex].src}
                   alt={images[currentImageIndex].alt}
@@ -80,6 +82,7 @@ export default function MoustiquairePage() {
 
               {/* Boutons de navigation */}
               <button
+                type="button"
                 onClick={prevImage}
                 className="absolute left-4 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full p-3 shadow-lg z-10"
                 aria-label="Image précédente"
@@ -87,6 +90,7 @@ export default function MoustiquairePage() {
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
+                type="button"
                 onClick={nextImage}
                 className="absolute right-4 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full p-3 shadow-lg z-10"
                 aria-label="Image suivante"
@@ -98,7 +102,8 @@ export default function MoustiquairePage() {
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
                 {images.map((_, index) => (
                   <button
-                    key={index}
+                    type="button"
+                    key={images[index].src}
                     onClick={() => setCurrentImageIndex(index)}
                     className={`w-2 h-2 rounded-full transition-all ${
                       index === currentImageIndex
@@ -110,10 +115,137 @@ export default function MoustiquairePage() {
                 ))}
               </div>
             </div>
+          </div>
 
+          {/* Configuration */}
+          <div className="space-y-4 lg:space-y-6">
+            <Badge variant="secondary" className="mb-4">
+              Moustiquaires Fenêtres
+            </Badge>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 leading-tight">
+              Moustiquaire fenêtre enroulable sur-mesure Verticale Anti-Insectes
+            </h1>
 
-            {/* Badges de confiance */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Card className="mb-6">
+              <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">
+                    Configurez votre moustiquaire sur-mesure
+                  </h2>
+                  <p className="text-muted-foreground">
+                    Indiquez les dimensions de votre fenêtre pour obtenir un devis instantané
+                  </p>
+                </div>
+
+                {/* Dimensions */}
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                    <Label className="text-base font-semibold">
+                      Dimensions <span className="text-red-500">*</span>
+                    </Label>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full sm:w-auto justify-center"
+                      onClick={() => window.open('/prise_de_mesure.pdf', '_blank')}
+                    >
+                      📏 Comment prendre les mesures
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={largeurInputId} className="text-sm sm:text-base">Largeur (mm)</Label>
+                      <Input
+                        id={largeurInputId}
+                        type="number"
+                        min={dimensionRanges.largeur.min}
+                        max={dimensionRanges.largeur.max}
+                        step="100"
+                        value={largeur || ""}
+                        onChange={(e) => setLargeur(Number(e.target.value))}
+                        placeholder="0"
+                        className="text-base sm:text-lg"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Valeurs disponibles : {dimensionRanges.largeur.min} mm - {dimensionRanges.largeur.max} mm (paliers de 100mm)
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={hauteurInputId} className="text-sm sm:text-base">Hauteur (mm)</Label>
+                      <Input
+                        id={hauteurInputId}
+                        type="number"
+                        min={dimensionRanges.hauteur.min}
+                        max={dimensionRanges.hauteur.max}
+                        step="100"
+                        value={hauteur || ""}
+                        onChange={(e) => setHauteur(Number(e.target.value))}
+                        placeholder="0"
+                        className="text-base sm:text-lg"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Valeurs disponibles : {dimensionRanges.hauteur.min} mm - {dimensionRanges.hauteur.max} mm (paliers de 100mm)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Message d'erreur si dimensions invalides */}
+                {largeur > 0 && hauteur > 0 && !isDimensionValid && (
+                  <div className="bg-red-50 border border-red-200 p-3 sm:p-4 rounded-lg flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-semibold text-red-900">Dimensions non disponibles</p>
+                      <p className="text-sm text-red-700">
+                        Les dimensions {hauteur}x{largeur}mm ne correspondent pas à un produit disponible.
+                        Veuillez choisir des dimensions par paliers de 100mm.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="bg-muted/50 p-4 rounded-lg">
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Configuration par défaut :</strong> Toile noire, structure blanche
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Résumé */}
+            <Card className="mb-4 sm:mb-6 bg-primary/5">
+              <CardContent className="p-4 sm:p-6">
+                <h3 className="font-semibold mb-3">Votre configuration :</h3>
+                <div className="space-y-2 text-xs sm:text-sm">
+                  <p>
+                    <span className="font-medium">Dimensions :</span> Largeur : {largeur} mm - Hauteur : {hauteur} mm
+                  </p>
+                  <p>
+                    <span className="font-medium">Coloris :</span> Toile noire, structure blanche
+                  </p>
+                </div>
+                <Separator className="my-3 sm:my-4" />
+                {priceHT > 0 && (
+                  <div className="space-y-2 mb-3">
+                    <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground">
+                      <span>Prix HT</span>
+                      <span>{priceHT} €</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground">
+                      <span>TVA (20%)</span>
+                      <span>{priceTVA} €</span>
+                    </div>
+                  </div>
+                )}
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-base sm:text-lg font-semibold">Prix final TTC</span>
+                  <span className="text-2xl sm:text-3xl font-bold text-primary">{price} €</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Badges de confiance (déplacés sous le prix) */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
               <Card>
                 <CardContent className="p-4 text-center">
                   <div className="flex flex-col items-center gap-2">
@@ -170,138 +302,11 @@ export default function MoustiquairePage() {
                 </CardContent>
               </Card>
             </div>
-          </div>
-
-          {/* Configuration */}
-          <div>
-            <Badge variant="secondary" className="mb-4">
-              Moustiquaires Fenêtres
-            </Badge>
-            <h1 className="text-3xl md:text-4xl font-bold mb-6">
-              Moustiquaire fenêtre enroulable sur-mesure Verticale Anti-Insectes
-            </h1>
-
-            <Card className="mb-6">
-              <CardContent className="p-6 space-y-6">
-                <div>
-                  <h2 className="text-xl font-semibold mb-4">
-                    Configurez votre moustiquaire sur-mesure
-                  </h2>
-                  <p className="text-muted-foreground">
-                    Indiquez les dimensions de votre fenêtre pour obtenir un devis instantané
-                  </p>
-                </div>
-
-                {/* Dimensions */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-base font-semibold">
-                      Dimensions <span className="text-red-500">*</span>
-                    </Label>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => window.open('/prise_de_mesure.pdf', '_blank')}
-                    >
-                      📏 Comment prendre les mesures
-                    </Button>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="largeur">Largeur (mm)</Label>
-                      <Input
-                        id="largeur"
-                        type="number"
-                        min={dimensionRanges.largeur.min}
-                        max={dimensionRanges.largeur.max}
-                        step="100"
-                        value={largeur || ""}
-                        onChange={(e) => setLargeur(Number(e.target.value))}
-                        placeholder="0"
-                        className="text-lg"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Valeurs disponibles : {dimensionRanges.largeur.min} mm - {dimensionRanges.largeur.max} mm (paliers de 100mm)
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="hauteur">Hauteur (mm)</Label>
-                      <Input
-                        id="hauteur"
-                        type="number"
-                        min={dimensionRanges.hauteur.min}
-                        max={dimensionRanges.hauteur.max}
-                        step="100"
-                        value={hauteur || ""}
-                        onChange={(e) => setHauteur(Number(e.target.value))}
-                        placeholder="0"
-                        className="text-lg"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Valeurs disponibles : {dimensionRanges.hauteur.min} mm - {dimensionRanges.hauteur.max} mm (paliers de 100mm)
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Message d'erreur si dimensions invalides */}
-                {largeur > 0 && hauteur > 0 && !isDimensionValid && (
-                  <div className="bg-red-50 border border-red-200 p-4 rounded-lg flex items-start gap-3">
-                    <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-semibold text-red-900">Dimensions non disponibles</p>
-                      <p className="text-sm text-red-700">
-                        Les dimensions {hauteur}x{largeur}mm ne correspondent pas à un produit disponible.
-                        Veuillez choisir des dimensions par paliers de 100mm.
-                      </p>
-                    </div>
-                  </div>
-                )}
-
-                <div className="bg-muted/50 p-4 rounded-lg">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Configuration par défaut :</strong> Toile noire, structure blanche
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Résumé */}
-            <Card className="mb-6 bg-primary/5">
-              <CardContent className="p-6">
-                <h3 className="font-semibold mb-3">Votre configuration :</h3>
-                <div className="space-y-2 text-sm">
-                  <p>
-                    <span className="font-medium">Dimensions :</span> Largeur : {largeur} mm - Hauteur : {hauteur} mm
-                  </p>
-                  <p>
-                    <span className="font-medium">Coloris :</span> Toile noire, structure blanche
-                  </p>
-                </div>
-                <Separator className="my-4" />
-                {priceHT > 0 && (
-                  <div className="space-y-2 mb-3">
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <span>Prix HT</span>
-                      <span>{priceHT} €</span>
-                    </div>
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <span>TVA (20%)</span>
-                      <span>{priceTVA} €</span>
-                    </div>
-                  </div>
-                )}
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-semibold">Prix final TTC</span>
-                  <span className="text-3xl font-bold text-primary">{price} €</span>
-                </div>
-              </CardContent>
-            </Card>
 
             {/* Bouton Acheter */}
             <Button
               size="lg"
-              className="w-full mb-6"
+              className="w-full mb-6 text-sm sm:text-base"
               disabled={!isDimensionValid}
               onClick={() => {
                 if (isDimensionValid) {
@@ -313,7 +318,7 @@ export default function MoustiquairePage() {
             </Button>
 
             {/* Badges de réassurance */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
               <div className="flex flex-col items-center text-center gap-2">
                 <Truck className="h-6 w-6 text-primary" />
                 <div>
@@ -340,9 +345,9 @@ export default function MoustiquairePage() {
         </div>
 
         {/* Onglets Description */}
-        <div className="mt-12">
+        <div className="mt-8 sm:mt-12">
           <Tabs defaultValue="description" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
+            <TabsList className="w-full flex flex-nowrap md:grid md:grid-cols-4 lg:grid-cols-6 overflow-x-auto md:overflow-visible gap-2 md:gap-0">
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="caracteristiques">Caractéristiques</TabsTrigger>
               <TabsTrigger value="avantages">Avantages</TabsTrigger>
