@@ -450,38 +450,101 @@ export const PRICE_AMOUNTS: Record<string, number> = {
 const TVA_RATE = 0.20; // 20%
 
 /**
- * Trouve le price ID Stripe correspondant aux dimensions données
+ * Arrondit les dimensions vers le haut aux dimensions disponibles les plus proches
  * @param hauteur Hauteur en mm
  * @param largeur Largeur en mm
- * @returns Le price ID Stripe ou null si non trouvé
+ * @returns Les dimensions arrondies ou null si hors limites
+ */
+function roundUpDimensions(hauteur: number, largeur: number): { hauteur: number, largeur: number } | null {
+  const ranges = getDimensionRanges();
+
+  // Vérifier que les dimensions sont dans les limites
+  if (hauteur < ranges.hauteur.min || hauteur > ranges.hauteur.max ||
+      largeur < ranges.largeur.min || largeur > ranges.largeur.max) {
+    return null;
+  }
+
+  // Trouver la hauteur disponible immédiatement supérieure ou égale
+  const roundedHauteur = ranges.hauteur.values.find(h => h >= hauteur) || ranges.hauteur.max;
+
+  // Trouver la largeur disponible immédiatement supérieure ou égale
+  const roundedLargeur = ranges.largeur.values.find(l => l >= largeur) || ranges.largeur.max;
+
+  return { hauteur: roundedHauteur, largeur: roundedLargeur };
+}
+
+/**
+ * Trouve le price ID Stripe correspondant aux dimensions données
+ * Si les dimensions exactes n'existent pas, arrondit vers le haut
+ * @param hauteur Hauteur en mm
+ * @param largeur Largeur en mm
+ * @returns Le price ID Stripe ou null si hors limites
  */
 export function findPriceId(hauteur: string | number, largeur: string | number): string | null {
-  const key = `${hauteur}x${largeur}`;
-  return PRICE_MAPPING[key] || null;
+  const h = Number(hauteur);
+  const l = Number(largeur);
+
+  // Essayer d'abord avec les dimensions exactes
+  const exactKey = `${h}x${l}`;
+  if (PRICE_MAPPING[exactKey]) {
+    return PRICE_MAPPING[exactKey];
+  }
+
+  // Sinon, arrondir vers le haut
+  const rounded = roundUpDimensions(h, l);
+  if (!rounded) return null;
+
+  const roundedKey = `${rounded.hauteur}x${rounded.largeur}`;
+  return PRICE_MAPPING[roundedKey] || null;
 }
 
 /**
  * Trouve le prix TTC en euros correspondant aux dimensions données
+ * Si les dimensions exactes n'existent pas, arrondit vers le haut
  * Les prix dans Stripe sont déjà en TTC
  * @param hauteur Hauteur en mm
  * @param largeur Largeur en mm
- * @returns Le prix TTC en euros ou null si non trouvé
+ * @returns Le prix TTC en euros ou null si hors limites
  */
 export function findPrice(hauteur: string | number, largeur: string | number): number | null {
-  const key = `${hauteur}x${largeur}`;
-  return PRICE_AMOUNTS[key] || null;
+  const h = Number(hauteur);
+  const l = Number(largeur);
+
+  // Essayer d'abord avec les dimensions exactes
+  const exactKey = `${h}x${l}`;
+  if (PRICE_AMOUNTS[exactKey]) {
+    return PRICE_AMOUNTS[exactKey];
+  }
+
+  // Sinon, arrondir vers le haut
+  const rounded = roundUpDimensions(h, l);
+  if (!rounded) return null;
+
+  const roundedKey = `${rounded.hauteur}x${rounded.largeur}`;
+  return PRICE_AMOUNTS[roundedKey] || null;
 }
 
 /**
  * Calcule le prix HT à partir du prix TTC (pour affichage)
+ * Si les dimensions exactes n'existent pas, arrondit vers le haut
  * @param hauteur Hauteur en mm
  * @param largeur Largeur en mm
- * @returns Le prix HT en euros ou null si non trouvé
+ * @returns Le prix HT en euros ou null si hors limites
  */
 export function findPriceHT(hauteur: string | number, largeur: string | number): number | null {
   const priceTTC = findPrice(hauteur, largeur);
   if (!priceTTC) return null;
   return Math.round(priceTTC / (1 + TVA_RATE));
+}
+
+/**
+ * Obtient les dimensions arrondies utilisées pour le calcul du prix
+ * @param hauteur Hauteur en mm
+ * @param largeur Largeur en mm
+ * @returns Les dimensions arrondies ou null si hors limites
+ */
+export function getRoundedDimensions(hauteur: number, largeur: number): { hauteur: number, largeur: number } | null {
+  return roundUpDimensions(hauteur, largeur);
 }
 
 /**

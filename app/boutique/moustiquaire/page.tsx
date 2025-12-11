@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Check, Home, ChevronRight, Truck, Shield, CreditCard, Ruler, AlertCircle, ChevronLeft } from "lucide-react";
-import { findPrice, findPriceHT, getDimensionRanges } from "@/lib/stripe-prices";
+import { findPrice, findPriceHT, getDimensionRanges, getRoundedDimensions } from "@/lib/stripe-prices";
 
 export default function MoustiquairePage() {
   const [largeur, setLargeur] = useState(0);
@@ -48,7 +48,19 @@ export default function MoustiquairePage() {
   const price = calculatePrice();
   const priceHT = calculatePriceHT();
   const priceTVA = price - priceHT;
-  const isDimensionValid = largeur > 0 && hauteur > 0 && price > 0;
+
+  // Dimensions dans les limites min/max
+  const isWithinLimits = largeur >= dimensionRanges.largeur.min &&
+                         largeur <= dimensionRanges.largeur.max &&
+                         hauteur >= dimensionRanges.hauteur.min &&
+                         hauteur <= dimensionRanges.hauteur.max;
+
+  const isDimensionValid = largeur > 0 && hauteur > 0 && isWithinLimits && price > 0;
+
+  // Obtenir les dimensions arrondies pour affichage
+  const roundedDimensions = (largeur > 0 && hauteur > 0) ? getRoundedDimensions(hauteur, largeur) : null;
+  const isRounded = roundedDimensions &&
+                    (roundedDimensions.hauteur !== hauteur || roundedDimensions.largeur !== largeur);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
@@ -160,14 +172,13 @@ export default function MoustiquairePage() {
                         type="number"
                         min={dimensionRanges.largeur.min}
                         max={dimensionRanges.largeur.max}
-                        step="100"
                         value={largeur || ""}
                         onChange={(e) => setLargeur(Number(e.target.value))}
                         placeholder="0"
                         className="text-base sm:text-lg"
                       />
                       <p className="text-xs text-muted-foreground">
-                        Valeurs disponibles : {dimensionRanges.largeur.min} mm - {dimensionRanges.largeur.max} mm (paliers de 100mm)
+                        Min : {dimensionRanges.largeur.min} mm - Max : {dimensionRanges.largeur.max} mm
                       </p>
                     </div>
                     <div className="space-y-2">
@@ -177,32 +188,31 @@ export default function MoustiquairePage() {
                         type="number"
                         min={dimensionRanges.hauteur.min}
                         max={dimensionRanges.hauteur.max}
-                        step="100"
                         value={hauteur || ""}
                         onChange={(e) => setHauteur(Number(e.target.value))}
                         placeholder="0"
                         className="text-base sm:text-lg"
                       />
                       <p className="text-xs text-muted-foreground">
-                        Valeurs disponibles : {dimensionRanges.hauteur.min} mm - {dimensionRanges.hauteur.max} mm (paliers de 100mm)
+                        Min : {dimensionRanges.hauteur.min} mm - Max : {dimensionRanges.hauteur.max} mm
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Message d'erreur si dimensions invalides */}
-                {largeur > 0 && hauteur > 0 && !isDimensionValid && (
+                {/* Message d'erreur si dimensions hors limites */}
+                {largeur > 0 && hauteur > 0 && !isWithinLimits && (
                   <div className="bg-red-50 border border-red-200 p-3 sm:p-4 rounded-lg flex items-start gap-3">
                     <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-semibold text-red-900">Dimensions non disponibles</p>
+                      <p className="text-sm font-semibold text-red-900">Dimensions hors limites</p>
                       <p className="text-sm text-red-700">
-                        Les dimensions {hauteur}x{largeur}mm ne correspondent pas à un produit disponible.
-                        Veuillez choisir des dimensions par paliers de 100mm.
+                        Veuillez choisir des dimensions entre {dimensionRanges.hauteur.min}-{dimensionRanges.hauteur.max}mm (hauteur) et {dimensionRanges.largeur.min}-{dimensionRanges.largeur.max}mm (largeur).
                       </p>
                     </div>
                   </div>
                 )}
+
 
                 <div className="bg-muted/50 p-4 rounded-lg">
                   <p className="text-sm text-muted-foreground">
