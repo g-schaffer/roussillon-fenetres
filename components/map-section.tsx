@@ -62,10 +62,10 @@ export function MapSection() {
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Email</h3>
                   <a
-                    href="mailto:contact@roussillon-fenetres.fr"
+                    href="mailto:roussillonfenetres@gmail.com"
                     className="text-muted-foreground hover:text-primary transition-colors break-all"
                   >
-                    contact@roussillon-fenetres.fr
+                    roussillonfenetres@gmail.com
                   </a>
                 </div>
               </div>

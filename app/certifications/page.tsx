@@ -146,7 +146,7 @@ export default function CertificationsPage() {
                 Notre équipe se tient à votre disposition pour vous fournir tous les détails sur nos certifications et garanties.
               </p>
               <a
-                href="mailto:contact@roussillon-fenetres.fr"
+                href="mailto:roussillonfenetres@gmail.com"
                 className="inline-flex items-center justify-center rounded-md bg-primary-foreground px-6 py-3 text-sm font-medium text-primary hover:bg-primary-foreground/90 transition-colors"
               >
                 Nous contacter
